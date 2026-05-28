@@ -4,7 +4,7 @@ export interface TestUser {
 }
 
 const env = (key: string): string => {
-  const v = Cypress.expose(key) as string | undefined
+  const v = Cypress.env(key) as string | undefined
   if (!v) throw new Error(`Missing Cypress env var: ${key}`)
   return v
 }

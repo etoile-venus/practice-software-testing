@@ -41,7 +41,7 @@ Copy `cypress.env.example.json` to `cypress.env.json` and fill in:
   "STANDARD_EMAIL": "customer@practicesoftwaretesting.com",
   "STANDARD_PASSWORD": "welcome01",
   "ADMIN_EMAIL": "admin@practicesoftwaretesting.com",
-  "ADMIN_PASSWORD": "AKZg5VGsBq"
+  "ADMIN_PASSWORD": "welcome01"
 }
 ```
 
@@ -84,7 +84,7 @@ and add:
 | `CYPRESS_STANDARD_EMAIL`    | customer@practicesoftwaretesting.com |
 | `CYPRESS_STANDARD_PASSWORD` | welcome01                            |
 | `CYPRESS_ADMIN_EMAIL`       | admin@practicesoftwaretesting.com    |
-| `CYPRESS_ADMIN_PASSWORD`    | AKZg5VGsBq                           |
+| `CYPRESS_ADMIN_PASSWORD`    | welcome01                            |
 
 The workflow reads these as environment variables (`CYPRESS_*` prefix is picked
 up by Cypress automatically).
