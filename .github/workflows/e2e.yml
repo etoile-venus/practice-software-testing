@@ -52,27 +52,7 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Check app availability
-        id: app
-        shell: bash
-        run: |
-          status=$(curl -L -s -o /dev/null -w "%{http_code}" "$CYPRESS_BASE_URL")
-          echo "status=$status" >> "$GITHUB_OUTPUT"
-
-          if [[ "$status" =~ ^(2|3)[0-9][0-9]$ ]]; then
-            echo "available=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "available=false" >> "$GITHUB_OUTPUT"
-            {
-              echo "### Cypress E2E skipped"
-              echo ""
-              echo "\`$CYPRESS_BASE_URL\` returned HTTP $status from the GitHub runner."
-              echo "The suite was not started because the external demo app was unavailable to CI."
-            } >> "$GITHUB_STEP_SUMMARY"
-          fi
-
       - name: Run Cypress
-        if: steps.app.outputs.available == 'true'
         uses: cypress-io/github-action@v6
         with:
           browser: chrome
