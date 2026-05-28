@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "ignoreDeprecations": "6.0",
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "isolatedModules": false,
+    "sourceMap": false,
+    "baseUrl": ".",
+    "paths": {
+      "@pages/*": ["cypress/pages/*"],
+      "@fixtures/*": ["cypress/fixtures/*"],
+      "@config/*": ["cypress/config/*"],
+      "@utils/*": ["cypress/utils/*"],
+      "@utils/api": ["cypress/utils/api"],
+      "@support/*": ["cypress/support/*"],
+      "@factories/*": ["cypress/factories/*"]
+    },
+    "types": ["cypress", "node"]
+  },
+  "include": ["cypress/**/*.ts", "cypress.config.ts"]
+}

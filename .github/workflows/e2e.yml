@@ -1,0 +1,88 @@
+name: E2E
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'Optional grep tags (e.g. @smoke or @regression)'
+        required: false
+        type: string
+
+# Cancel in-flight runs for the same PR/branch.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  e2e:
+    name: Cypress - chrome
+    runs-on: ubuntu-latest
+
+    env:
+      CYPRESS_BASE_URL: ${{ vars.CYPRESS_BASE_URL || 'https://practicesoftwaretesting.com' }}
+      CYPRESS_API_BASE_URL: ${{ vars.CYPRESS_API_BASE_URL || 'https://api.practicesoftwaretesting.com' }}
+      CYPRESS_STANDARD_EMAIL: ${{ secrets.CYPRESS_STANDARD_EMAIL }}
+      CYPRESS_STANDARD_PASSWORD: ${{ secrets.CYPRESS_STANDARD_PASSWORD }}
+      CYPRESS_ADMIN_EMAIL: ${{ secrets.CYPRESS_ADMIN_EMAIL }}
+      CYPRESS_ADMIN_PASSWORD: ${{ secrets.CYPRESS_ADMIN_PASSWORD }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type-check
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Run Cypress
+        uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
+          install: false
+          spec: cypress/e2e/**/*.cy.ts
+          env: grepTags=${{ inputs.tags }}
+
+      - name: Upload screenshots on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Upload JUnit results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-junit
+          path: cypress/reports/junit/*.xml
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Publish JUnit summary
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: Cypress - chrome
+          path: cypress/reports/junit/*.xml
+          reporter: java-junit
+          fail-on-error: false

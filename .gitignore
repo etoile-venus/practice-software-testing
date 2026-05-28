@@ -1,0 +1,28 @@
+# --- Node ---
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json.bak
+*.log
+
+# --- Cypress artifacts ---
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+cypress/reports/
+
+# --- Secrets ---
+# Real env values live here; commit only cypress.env.example.json.
+cypress.env.json
+.env
+.env.local
+
+# --- Editor / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- TS build output (we use --noEmit, but just in case) ---
+*.tsbuildinfo
+dist/
