@@ -8,6 +8,21 @@ authentication, data-driven tests with `@faker-js/faker`, named tags via
 
 ---
 
+## CI availability note
+
+The public demo site can return `403 Forbidden` from GitHub-hosted runners before
+any test steps run. When that happens, failures appear in `cy.visit()` calls such
+as `/`, `/auth/login`, or `/auth/register`; this is an environment access issue,
+not a failed assertion in the test suite.
+
+The current workflow checks the public app before starting Cypress and skips the
+E2E run if the site is not reachable from CI. A more stable long-term solution is
+to start the Practice Software Testing app with Docker Compose inside GitHub
+Actions and run Cypress against local URLs such as `http://localhost:4200` for
+the UI and `http://localhost:8091` for the API.
+
+---
+
 ## Requirements
 
 - Node.js 20+
